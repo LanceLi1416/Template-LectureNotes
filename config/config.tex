@@ -1,0 +1,431 @@
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{etoolbox}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{lipsum}
+\usepackage{longtable}
+\usepackage{pgffor}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{url}
+
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[
+    letterpaper,
+    inner=1.25in,
+    outer=1in,
+    top=1in,
+    bottom=1in
+]{geometry}
+\usepackage[scaled]{helvet}
+\usepackage[utf8]{inputenc}
+\usepackage[most]{tcolorbox}
+\usepackage[dvipsnames]{xcolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colour
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{config/colors.tex}
+
+% Light-Blue-700
+\definecolor{primary}{HTML}{0288D1}
+
+% Hyperref ---------------------------------------------------------------------
+\hypersetup{
+    colorlinks,
+    linkcolor=black, 
+    filecolor=Pink-300,
+    urlcolor=Blue-700,
+    citecolor=black,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\by}[1]{\hfill--- #1}
+
+% TODO: Add more custom commands here
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Text styles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Font -------------------------------------------------------------------------
+% \renewcommand{\familydefault}{\sfdefault} % Sans-serif font
+\renewcommand{\familydefault}{\rmdefault} % Serif font
+
+% Text styles ------------------------------------------------------------------
+\DeclareTextFontCommand{\term}{\color{Orange-700}\bfseries}
+
+\DeclareTextFontCommand{\bold}{\bfseries}
+\DeclareTextFontCommand{\italic}{\itshape}
+
+\renewcommand{\textbf}[1]{\textcolor{Red-800}{\bfseries #1}}
+\renewcommand{\textit}[1]{\textcolor{Light-Blue-400}{\itshape #1}}
+
+% Paragraph spacing ------------------------------------------------------------
+% \setlength{\parindent}{0pt} % No paragraph indentation
+% \setlength{\parskip}{1em} % Paragraph spacing
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewenvironment{quote}
+{\list{}{\rightmargin=0.5cm\leftmargin=0.5cm}\item\relax\itshape}
+{\endlist}
+
+% Lists ------------------------------------------------------------------------
+% itemize
+\renewcommand{\labelitemi}{\textcolor{primary}{\textbullet}}
+\renewcommand{\labelitemii}{\textcolor{primary}{\textbullet}}
+\renewcommand{\labelitemiii}{\textcolor{primary}{\textbullet}}
+\renewcommand{\labelitemiv}{\textcolor{primary}{\textbullet}}
+
+% enumerate
+\newcommand{\cnum}[2]{
+    \tikz[baseline=(c.base)]
+    \node[circle,fill=#2,minimum size=0.5cm,inner sep=1pt](c)
+    {\color{white}\bfseries\fontsize{8}{8}#1};}
+
+\renewcommand{\labelenumi}{\cnum{\arabic{enumi}}{primary}}
+\renewcommand{\labelenumii}{\cnum{\alph{enumii}}{primary}}
+\renewcommand{\labelenumiii}{\cnum{\roman{enumiii}}{primary}}
+\renewcommand{\labelenumiv}{\cnum{\Alph{enumiv}}{primary}}
+
+% amsthm -----------------------------------------------------------------------
+\newcommand\fancybox[3]{%
+    \tcbset{mybox/.style={enhanced,boxsep=0mm,opacityfill=0,overlay={
+                    \coordinate (X) at ([xshift=-1mm, yshift=-1.5mm]frame.north west);
+                    \node[align=right, text=#1, text width=2.5cm, anchor=north east] at (X) {\bf#2};
+                    \draw[line width=0.5mm, color=#1] (frame.north west) -- (frame.south west);
+                }}} \begin{tcolorbox}[mybox] #3 \end{tcolorbox}}
+
+\tcbuselibrary{theorems,skins,hooks}
+\NewDocumentCommand\thmbox{m O{\Large #1} O{Gray-100} O{primary} O{number within=section}}
+{
+    \newtcbtheorem[#5]{#1}{\large #2}
+    {%
+        enhanced,
+        breakable,
+        colback = #3,
+        frame hidden,
+        boxrule = 0sp,
+        borderline west = {2pt}{0pt}{#4},
+        sharp corners,
+        detach title,
+        before upper = \tcbtitle\par\smallskip,
+        coltitle = #4,
+        fonttitle = \bfseries,
+        description font = \mdseries,
+        separator sign none,
+        segmentation style={solid, #4}
+    }
+    {th}
+}
+
+% Universal counter for theorem environments
+\newcounter{universal}
+
+% Corollary --------------------------------------------------------------------
+\thmbox{Corollary} [Corollary] [Purple-50] [Purple-800] 
+[use counter=universal, number within=section]
+
+\newenvironment{corollary}[1][] {\begin{Corollary}{#1}{}} {\end{Corollary}}
+
+% Definition -------------------------------------------------------------------
+\thmbox{Definition} [Definition] [Light-Blue-50] [Light-Blue-800]
+[use counter=universal, number within=section]
+
+\newenvironment{definition}[1][] {\begin{Definition}{#1}{}} {\end{Definition}}
+
+% Example ----------------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem*{Example}{\color{primary}Example}
+
+\newenvironment{example}
+{\begin{Example}}
+{\hfill\ensuremath{\color{primary}\diamondsuit}\end{Example}}
+
+% Lemma ------------------------------------------------------------------------
+\thmbox{Lemma} [Lemma] [Green-50] [Green-800]
+[use counter=universal, number within=section]
+
+\newenvironment{lemma}[1][] {\begin{Lemma}{#1}{}} {\end{Lemma}}
+
+% Remark -----------------------------------------------------------------------
+\thmbox{Remark} [Remark] [Gray-200] [Gray-700] [no counter]
+
+\newenvironment{remark}[1][] {\begin{Remark}{#1}{}} {\end{Remark}}
+
+% Proposition ------------------------------------------------------------------
+\thmbox{Proposition} [Proposition] [Orange-50] [Orange-800]
+[use counter=universal, number within=section]
+
+\newenvironment{proposition}[1][] {\begin{Proposition}{#1}{}} {\end{Proposition}}
+
+% Theorem ----------------------------------------------------------------------
+\thmbox{Theorem} [Theorem] [Red-50] [Red-800]
+[use counter=universal, number within=section]
+
+\newenvironment{theorem}[1][] {\begin{Theorem}{#1}{}} {\end{Theorem}}
+
+% Algorithms -------------------------------------------------------------------
+% \Call
+\algrenewcommand\Call[2]{\textproc{\color{primary}\textsc{#1}}(#2)}
+
+% \Else
+\algrenewcommand\algorithmicelse {\textsc{\color{primary}Else}}
+
+% \For
+\algrenewcommand\algorithmicfor {\textsc{\color{primary}For}}
+\algtext*{EndFor}
+
+% \Function
+\algrenewcommand\algorithmicfunction {\textsc{\color{primary}Function}}
+\algtext*{EndFunction}
+
+% \If
+\algrenewcommand\algorithmicif {\textsc{\color{primary}If}}
+\algtext*{EndIf}
+
+% \Return
+\algrenewcommand\algorithmicreturn {\textsc{\color{primary}Return}}
+
+% \To
+\newcommand{\To}{\textsc{\color{primary}To}\xspace}
+
+% \While
+\algrenewcommand\algorithmicwhile {\textsc{\color{primary}While}}
+\algtext*{EndWhile}
+
+% Proof ------------------------------------------------------------------------
+\renewcommand{\qedsymbol}{\ensuremath\blacksquare}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Heading styles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[explicit]{titlesec}
+
+% Part -------------------------------------------------------------------------
+\titleformat{\part}[display]
+{\Large\bf} {\textsc{\partname~\thepart}} {12pt} {
+    \Huge\textsc{#1}
+} [\thispagestyle{empty}]
+
+% Chapter ----------------------------------------------------------------------
+\newtcolorbox{titlecolorbox}[1]{
+    coltext=white,
+    colframe=primary,
+    colback=primary,
+    boxrule=0pt,
+    arc=0pt,
+    notitle,
+    width=4.3em,
+    height=2.4ex,
+    before=\hfill
+}
+
+\makeatletter
+\let\old@rule\@rule
+\def\@rule[#1]#2#3{\textcolor{primary}{\old@rule[#1]{#2}{#3}}}
+\makeatother
+
+\titleformat{\chapter}[display]
+{\Huge} {} {0pt} {
+    \begin{titlecolorbox}{}
+        {\large\MakeUppercase{\bf\chaptername}}
+    \end{titlecolorbox}
+    \vspace*{-3.19ex}\noindent\rule{\textwidth}{0.4pt}
+    \parbox[b]{\dimexpr\textwidth-4.8em\relax}{\raggedright\textsc{#1}}
+    {\hfill\fontsize{50}{40}\selectfont{\color{primary}\thechapter}}
+} [\thispagestyle{empty}]
+
+\titleformat{name=\chapter,numberless}[display]
+{\Huge} {} {0pt} {
+    \vspace*{-3.19ex}\noindent\rule{\textwidth}{0.4pt}
+    \parbox[b]{\dimexpr\textwidth-4.8em\relax}{\raggedright\MakeUppercase{#1}}
+} [\thispagestyle{empty}]
+
+\titlespacing*{\chapter}{0pt}{-20pt}{20pt}
+
+% Section ----------------------------------------------------------------------
+\titleformat{\section}[hang]{\Large\bfseries}%
+{\rlap{ \color{primary} \rule[-6pt] {\textwidth} {0.4pt} }
+    \colorbox{primary} {
+        \raisebox{0pt}[13pt][3pt] {
+            \makebox[60pt]{ \selectfont\color{white}{\thesection} }
+        }
+    }
+} {15pt} {\color{primary}#1}
+
+% Subsection -------------------------------------------------------------------
+\titleformat{\subsection}[hang]{\Large\bfseries}
+{\color{primary}{\thesubsection}} {10pt} {\color{primary}#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Header and footer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+
+\fancypagestyle{fancy} {
+    % Clear header/footer
+    \fancyhf{}
+    % Page number (left of even, right of odd)
+    \fancyhead[LE,RO]{\thepage}
+    % Chapter name (right of even)
+    \fancyhead[RE]{\nouppercase{\leftmark}}
+    % Section name (left of odd)
+    \fancyhead[LO]{\nouppercase{\rightmark}}
+    % No header rule
+    \renewcommand{\headrulewidth}{0pt}
+}
+
+
+% Define new page style for frontmatter
+\fancypagestyle{frontmatter} {
+    % Clear header/footer
+    \fancyhf{}
+    % No header rule
+    \renewcommand{\headrulewidth}{0pt}
+    % Page in footer, centred
+    \fancyfoot[C]{\thepage}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Table of contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{blindtext}
+\usepackage{framed}
+\usepackage{titletoc}
+
+\patchcmd{\tableofcontents}{\contentsname}{\contentsname}{}{}
+
+\newtoggle{isUnnumberedChapter}
+\togglefalse{isUnnumberedChapter} % Default state
+
+\renewenvironment{leftbar}
+{\def\FrameCommand{\hspace{6em}%
+        {\color{primary}\vrule width 2pt depth 6pt}\hspace{1em}}%
+    \MakeFramed{\parshape 1 0cm \dimexpr\textwidth-6em\relax\FrameRestore}\vskip2pt%
+}
+{\endMakeFramed}
+
+\titlecontents{chapter}[0em]
+{\vspace*{2\baselineskip}}
+{\parbox{4.5em}{%
+        \hfill\Huge\bfseries\color{primary}\thecontentslabel}%
+    \vspace*{-2.3\baselineskip}\leftbar\textbf{\color{primary}\small\chaptername~\thecontentslabel}\\
+}{}{\endleftbar}
+
+\titlecontents{section}[8.4em]
+{\contentslabel{3em}}{}{}
+{\hspace{0.5em}\nobreak\itshape\color{primary}\contentspage}
+
+\titlecontents{subsection}[11.4em]
+{\contentslabel{3em}}{}{}
+{\hspace{0.5em}\nobreak\itshape\color{primary}\contentspage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Glossary
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: Glossary configuration
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{csquotes}
+
+\usepackage[
+    style=ieee,
+    citestyle=ieee,
+    sorting=nyt,
+    sortcites=true,
+    autopunct=true,
+    autolang=hyphen,
+    hyperref=true,
+    abbreviate=false,
+    backref=true,
+    backend=biber,
+    defernumbers=true
+]{biblatex}
+
+\addbibresource{bibliography/template.bib}
+\addbibresource{bibliography/reference.bib}
+\defbibheading{bibempty}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Index
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{calc}
+\usepackage{makeidx}
+
+\makeindex
+
+% ------------------
+% Tikz Externalize
+% ------------------
+\usetikzlibrary{external}
+\tikzexternalize[prefix=tikz/]
+
+% Disable externalization globally, and only enable it for `tikzpicture'
+\tikzexternaldisable
+\BeforeBeginEnvironment[label]{tikzpicture}{\tikzexternalenable}
+\AfterEndEnvironment[label]{tikzpicture}{\tikzexternaldisable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usetikzlibrary{calc}
+\usetikzlibrary{shapes.geometric}
+\usepackage{anyfontsize}
+\newcommand{\frontpage}[3]{
+    \tikzset{external/export next=false}
+    \begin{tikzpicture}[remember picture, overlay]
+        % Background
+        \fill[primary] (current page.south west) rectangle (current page.north east);
+
+        \foreach \i in {2.5,...,22} {
+            \node[rounded corners,primary!60,draw,regular polygon,regular polygon sides=6, minimum size=\i cm,ultra thick] at ($(current page.west)+(2.5,-5)$) {} ;
+        }
+
+        % Background Polygon
+        \foreach \i in {0.5,...,22} {
+            \node[rounded corners,primary!60,draw,regular polygon,regular polygon sides=6, minimum size=\i cm,ultra thick] at ($(current page.north west)+(2.5,0)$) {} ;
+        }
+
+        \foreach \i in {0.5,...,22} {
+            \node[rounded corners,primary!90,draw,regular polygon,regular polygon sides=6, minimum size=\i cm,ultra thick] at ($(current page.north east)+(0,-9.5)$) {} ;
+        }
+
+        \foreach \i in {21,...,6} {
+            \node[primary!85,rounded corners,draw,regular polygon,regular polygon sides=6, minimum size=\i cm,ultra thick] at ($(current page.south east)+(-0.2,-0.45)$) {} ;
+        }
+
+        % Title
+        \node[left,primary!5,minimum width=0.625*\paperwidth,minimum height=3cm, rounded corners] at ($(current page.north east)+(0,-9.5)$) {
+            {\fontsize{25}{30} \selectfont \bfseries #1}
+        };
+
+        % Subtitle
+        \node[left,primary!10,minimum width=0.625*\paperwidth,minimum height=2cm, rounded corners] at ($(current page.north east)+(0,-11)$) {
+            {\huge \italic{#2}}
+        };
+
+        % Author
+        \node[left,primary!5,minimum width=0.625*\paperwidth,minimum height=2cm, rounded corners] at ($(current page.north east)+(0,-13)$) {
+            {\Large \textsc{#3}}
+        };
+
+        % Year
+        \node[rounded corners,fill=primary!70,text =primary!5,regular polygon,regular polygon sides=6, minimum size=2.5 cm,inner sep=0,ultra thick] at ($(current page.west)+(2.5,-5)$) {\LARGE \bfseries \the\year{}};
+    \end{tikzpicture}
+}
